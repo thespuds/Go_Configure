@@ -31,7 +31,8 @@ while True:
     for ip in ip_list:
         a = ip.split('.')
 
-        if (len(a) == 4) and (1<= int(a[0]) <= 223) and (int(a[0]) != 127) and (int(a[0]) != 169 or int(a[1]) != 254) and check = True
+        if (len(a) == 4) and (1 <= int(a[0]) <= 223) and (int(a[0]) != 127) and (int(a[0]) != 169 or int(a[1]) != 254) and (0 <= int(a[1]) <= 255 and 0 <= int(a[2]) <= 255 and 0 <= int(a[3]) <= 255):
+        check = True
         break
 
     else:
@@ -66,8 +67,6 @@ while True:
             else:
                 print "\n* Ping to the following device has FAILED:", ip
 
-
-#Connect to the device using username and password
 
 
 
