@@ -70,7 +70,7 @@ while True:
 
 
 
-#Open SSH or Telnet and log the result.
+#Open SSH and log the result.
 def open_connection(ip):
     try:
         #Define SSH parameters
@@ -113,9 +113,64 @@ def open_connection(ip):
                 finally continue
             for each_login in userfile:
             login_device_log = open('login_device.txt', 'w')
-            print >> login_device_log.write('%s,%s,%s SSH' % ip,username,password)
+            print >> login_device_log.write('%s,%s,%s SSH\n' % ip,username,password)
             login_device_log.close()
 
     ssh_device_log = open('ssh_device.txt', 'w')
     print >> ssh_device_log.write('%s,%s,%s' % ip,username,password)
     ssh_device_log.close()
+    #Closing the connection
+    session.close()
+
+
+#Open telnet connection to devices
+def open_telnet_conn(ip):
+    #Change exception message
+    try:
+        #Define telnet parameters
+
+        selected_user_file = open(user_file, 'r')
+
+        #Starting from the beginning of the file
+        selected_user_file.seek(0)
+
+        #Reading the username from the file
+        username = selected_user_file.readlines()[0].split(',')[0]
+
+        #Starting from the beginning of the file
+        selected_user_file.seek(0)
+
+        #Reading the password from the file
+        password = selected_user_file.readlines()[0].split(',')[1]
+
+        #Reading enable password from file
+        enablePass = selected_user_file.readlines()[0].split(',')[2].rstrip("\n")
+
+        #Specify the Telnet port (default is 23, anyway)
+        port = 23
+
+        #Specify the connection timeout in seconds for blocking operations, like the connection attempt
+        connection_timeout = 5
+
+        #Specify a timeout in seconds. Read until the string is found or until the timout has passed
+        reading_timeout = 5
+
+        #Logging into device
+        connection = telnetlib.Telnet(ip, port, connection_timeout)
+
+        #Waiting to be asked for an username
+        router_output = connection.read_until("Username:", reading_timeout)
+        #Enter the username when asked and a "\n" for Enter
+        connection.write(username + "\n")
+
+        #Waiting to be asked for a password
+        router_output = connection.read_until("Password:", reading_timeout)
+        #Enter the password when asked and a "\n" for Enter
+        connection.write(password + "\n")
+        time.sleep(1)
+
+        #Closing the connection
+        connection.close()
+
+    except IOError:
+        print "Input parameter error! Please check username, password and file name."
