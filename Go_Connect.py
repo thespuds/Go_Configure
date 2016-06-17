@@ -67,6 +67,9 @@ while True:
                 print "\n* Ping to the following device has FAILED:", ip
 
 
+#Connect to the device using username and password
+
+
 
 #Open SSH or Telnet and log the result.
 def open_connection(ip):
@@ -97,17 +100,22 @@ def open_connection(ip):
         session.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
         #Connect to the device using username and password
-        for each_login in user_file:
-            try:
-                session.connect(ip, username = username, password = password)
-                return True
-                break
+        def test_login(user_file):
+            for each_login in user_file:
+                try:
+                    session.connect(ip, username = username, password = password)
+                    if return True:
+                        break
 
-            except (paramiko.PasswordRequiredException, paramiko.AuthenticationException, SSHException, socket.error) as error:
-                print '\n* Login failed, trying next login...\n'
-                print repr(error)
-                sleep(interval)
-
+                except (paramiko.PasswordRequiredException, paramiko.AuthenticationException) as error:
+                    print '\n* Login failed, trying next login...\n'
+                    print repr(error)
+                    sleep(interval)
+                finally continue
+            for each_login in userfile:
+            login_device_log = open('login_device.txt', 'w')
+            print >> login_device_log.write('%s,%s,%s SSH' % ip,username,password)
+            login_device_log.close()
 
     ssh_device_log = open('ssh_device.txt', 'w')
     print >> ssh_device_log.write('%s,%s,%s' % ip,username,password)
