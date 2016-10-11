@@ -11,12 +11,14 @@ def how_connect(ip):
 
     try:
         ClientSocket.connect((ip, 22))
+        ClientSocket.listen(2)
         port = 22
-
+        
     except socket.error:
         pass
         try:
             ClientSocket.connect((ip, 23))
+            ClientSocket.listen(2)
             port = 23
         except socket.error:
             pass
